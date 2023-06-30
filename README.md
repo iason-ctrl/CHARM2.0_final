@@ -15,11 +15,19 @@ Requirements
 *   NIFTy can be installed using pip:
 
         pip install nifty8
+* If necessary, after NIFTy installation: Numpy, Scipy, Pandas, pickle, matplotlib, seaborn 
 
 
 
 
-Usage
+
+standard mean and fluct and std are only valid if length is so and so and resolution
+
+Usage and Workflow
 =================
+Copy onto your local device.
+
+Pickles WILL be overwritten if their name is not changed manually (if you want e.g. to play 
+around with cf parameters.)
 Explain how to deploy this project. Maybe minimum computer specifications or browser requirements are listed here as well.
 

@@ -34,8 +34,10 @@ def read_data(keyword="Pantheon+", from_pickle_directory=False):
         name = keyword
         return np.array(redshift), np.array(mu), np.array(Noise), name
 
-def build_cov_pantheon():
+def build_cov_pantheon(from_pickle_folder=False):
     path = "raw_data/Pantheon+SH0ES_STAT+SYS.cov"
+    if from_pickle_folder:
+        path = "../raw_data/Pantheon+SH0ES_STAT+SYS.cov"
     df = pd.read_table(path)
     arr = np.array(df["1701"]) # first line corresponds to '1701' = length of data array
     cov_matrix = arr.reshape(1701,1701)
@@ -129,10 +131,13 @@ def get_power_spec_params(power_spectrum:'np.ndarray',plot=False):
     k_modes_log = np.log10(range(len(power_spectrum)))[1:len(power_spectrum)]   # cut out and IGNORE the first element (-inf)
 
     if plot:
-        # This will only work for the first power spectrum sample, then it breaks
-        plt.plot(k_modes_log,pow_log,"b.")
-        plt.show()
-        plt.clf()
+        # Plot the log of the power spectrum vs the log of the k-modes
+        plt.plot(k_modes_log,pow_log,"b-", lw=1)
+
+        # if you want to plot instead the power spectrum vs fourier modes on a log-log scale, uncomment here :
+        '''plt.plot(range(len(power_spectrum)), power_spectrum, "b-", lw=1)
+        plt.xscale("log")
+        plt.yscale("log")'''
 
     popt = curve_fit(linear,k_modes_log,pow_log)
     params = popt[0]
@@ -174,7 +179,7 @@ class MatrixApplyInverseNoise(ift.MatrixProductOperator):
             A = U A_diag U^{-1}     where we assume real entries throughout
         """
         A = self._mat
-        if not np.allclose(A, A.T, rtol=1e-2,atol=1e-8):
+        if not np.allclose(A, A.T, rtol=1e-2,atol=1e-6):
             raise ValueError("Matrix is not symmetric, which is assumed in the diagonalization process (use of np.linalg.eigh instead of np.linalg.eig) ")
         rows, columns = A.shape
         if rows!= columns:
@@ -187,7 +192,7 @@ class MatrixApplyInverseNoise(ift.MatrixProductOperator):
         U_inv = np.linalg.inv(U)
 
         A_recomposed = U @ A_diag @ U_inv
-        sanity_check = np.allclose(A, A_recomposed,rtol=1e-2,atol=1e-8)
+        sanity_check = np.allclose(A, A_recomposed,rtol=1e-2,atol=1e-6)
 
         if not sanity_check:
             raise ValueError("Matrix is not element-wise almost equal to its decomposition in diagonalized and transformation matrices.")

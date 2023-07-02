@@ -8,18 +8,18 @@ import  os
 # -------  Basic parameters and constants  ------- #
 
 switch1 = False         # save in 'figures' folder: Moduli v Redshift distribution of used data
-switch2 = False         # show via plt.show(): Moduli v Redshift distribution of used data
+switch2 = True         # show via plt.show(): Moduli v Redshift distribution of used data
 
 switch3 = False         # save in 'figures' folder: Comparison of reconstruction and planck cosmology in signal space
-switch4 = False         # show via plt.show(): Comparison of reconstruction and planck cosmology in signal space
+switch4 = True         # show via plt.show(): Comparison of reconstruction and planck cosmology in signal space
 
 switch5 = False         # save in 'figures' folder: Visualization of posterior power spectrum
-switch6 = False         # show via plt.show(): Visualization of posterior power spectrum
+switch6 = True         # show via plt.show(): Visualization of posterior power spectrum
 
 switch7 = False         # save in 'figures' folder: Comparison of reconstruction and planck cosmology in data space
-switch8 = False         # show via plt.show(): Comparison of reconstruction and planck cosmology in data space
+switch8 = True         # show via plt.show(): Comparison of reconstruction and planck cosmology in data space
 
-use_union_data = True
+use_union_data = False
 compare_union_and_pantheon = False
 
 d_h = 3e8/(68.6e3)*1e6  # Hubble-length in parsecs
@@ -56,14 +56,14 @@ real_data_plot(save=switch1, show=switch2, z_data=redshifts, mu=moduli, keyword=
 '''
 We set the slope of the Power Spectrum to be -4. We set the fluctuations (additive offset to the Power Spectrum) to 
 be 1 within some small margin for error. Asperity and Flexibility are set to None since no deviation from power law behaviour 
-is expected.
+is expected. I want to analyize: fluctuations = (1, 1e-16), (0.22, 1e-16), (1,1) for Pantheon and Union
 '''
 
 
 args = {
     "offset_mean" :     0,
     "offset_std" :      None,
-    "fluctuations":     (1,1e-16),
+    "fluctuations":     (3,1),
     "loglogavgslope":   (-4,1e-16),
     "asperity":         None,
     "flexibility":      None
@@ -87,11 +87,10 @@ SUBTRACT_FIVES = ift.Adder(a=-5,domain=ift.DomainTuple.make(data_space,))
 
 if use_union_data:
     print("using Union2.1 data noise covariance in data space with length ", data_space.size)
-    noise_data = np.linalg.inv(noise_data)
-    #diagonal_noise_elements = np.diagonal(noise_data)
+    noise_data = noise_data
 else:
     print("using pantheon data noise covariance in data space with length ", data_space.size)
-    noise_data = np.linalg.inv(build_cov_pantheon())
+    noise_data = build_cov_pantheon()
 
 R = ift.LOSResponse(signal_space, starts=natural_redshift_starts, ends=natural_redshift_ends)
 N_inv = MatrixApplyInverseNoise(domain=data_space,matrix=noise_data,sampling_dtype=float)
@@ -115,16 +114,16 @@ signal_response = response_operator(signal)
 
 
 ic_sampling_lin = ift.AbsDeltaEnergyController(name="Sampling (linear)", deltaE=0.05, iteration_limit=100)
-ic_sampling_nl = ift.AbsDeltaEnergyController(name="Sampling (nonlinear)", deltaE=0.01, iteration_limit=60, convergence_level=2)
-ic_newton_minimization = ift.AbsDeltaEnergyController(name="Newton Minimization. Searching for energy descent direction", deltaE=0.5, iteration_limit=35, convergence_level=2)
+ic_sampling_nl = ift.AbsDeltaEnergyController(name="Sampling (nonlinear)", deltaE=0.5, iteration_limit=20, convergence_level=2)
+ic_newton_minimization = ift.AbsDeltaEnergyController(name="Newton Minimization. Searching for energy descent direction", deltaE=0.8, iteration_limit=35, convergence_level=2)
 
 minimizer_geoVI_MGVI = ift.NewtonCG(ic_newton_minimization)
 nonlinear_geoVI_minimizer = ift.NewtonCG(ic_sampling_nl)
 
 likelihood_energy = ift.GaussianEnergy(data_field, inverse_covariance=N_inv) @ signal_response
 
-global_iterations = 15
-n_samples = lambda iiter: 10 if iiter < 5 else 50 # increase sample rate for higher initial indices (get first a ball park and then converge with force)
+global_iterations = 6
+n_samples = lambda iiter: 10 if iiter < 5 else 15 # increase sample rate for higher initial indices (get first a ball park and then converge with force)
 samples = ift.optimize_kl(likelihood_energy=likelihood_energy,
                           total_iterations=global_iterations,
                           n_samples=n_samples,

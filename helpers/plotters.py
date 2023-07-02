@@ -25,10 +25,11 @@ ax.yaxis.set_minor_locator(AutoMinorLocator())
 palette = sns.color_palette('muted')
 blue, orange, green, red, mauve, brown, pink, gray, yellow, lightblue = palette
 
+path_extra = "../"
 
 
 
-def synthetic_plot(save:'bool', show:'bool', x:'np.ndarray', y:'np.ndarray', p:'np.ndarray', z_data:'np.ndarray', d:'np.ndarray', cf_args=None):
+def synthetic_plot(save:'bool', show:'bool', x:'np.ndarray', y:'np.ndarray', p:'np.ndarray', z_data:'np.ndarray', d:'np.ndarray', cf_args=None, from_pickle_directory=False):
     """
         Returns a figure containing the ground truth power spectrum and signal field as well as the used data realization
         and the used parameters for the correlated field model.
@@ -51,7 +52,7 @@ def synthetic_plot(save:'bool', show:'bool', x:'np.ndarray', y:'np.ndarray', p:'
     plt.subplot(2, 2, 1)
 
     plt.title("Ground Truth: Signal (Synth.)",fontsize=20)
-    plt.xlabel("Natural redshift coordinates $x$", fontsize=15)
+    plt.xlabel("scale factor magnitude $x$", fontsize=15)
     plt.ylabel("Signal field $s(x)$",fontsize=15)
     plt.plot(x,y,ls="--",lw=2, color=red)
 
@@ -65,7 +66,7 @@ def synthetic_plot(save:'bool', show:'bool', x:'np.ndarray', y:'np.ndarray', p:'
 
     plt.subplot(2, 2, 3)
     plt.title("Data Realizations (Synth.)", fontsize=20)
-    plt.xlabel("'Canonical' redshifts $z$",fontsize=15)
+    plt.xlabel("Redshifts $z$",fontsize=15)
     plt.ylabel("Distance moduli $\mu$",fontsize=15)
     plt.plot(z_data, d, markersize=8, marker="o", color="black", markerfacecolor='white',linewidth=0, label=f"{len(z_data)} datapoints ")
     plt.legend()
@@ -91,8 +92,13 @@ def synthetic_plot(save:'bool', show:'bool', x:'np.ndarray', y:'np.ndarray', p:'
         plt.clf()
     if save:
         fig.set_size_inches(16, 9)
+        groundpath = "figures/"
+        if from_pickle_directory:
+            path = path_extra + groundpath
+        else:
+            path = groundpath
         name = "synthetic_ground_truth_&_data"
-        plt.savefig("figures/" + name + ".png", dpi=300, bbox_inches='tight')
+        plt.savefig(path + name + ".png", dpi=300, bbox_inches='tight')
         print("Saved as " + name + ".png")
         plt.clf()
     if not show and not save:
@@ -102,7 +108,7 @@ def synthetic_plot(save:'bool', show:'bool', x:'np.ndarray', y:'np.ndarray', p:'
 def compare_in_data_space(save:'bool', show:'bool',synthetic:'bool',
                           data_produced_by_posterior:'np.ndarray',
                           data_produced_by_comparison_field:'np.ndarray',
-                          actual_data:'np.ndarray',x_data:'np.ndarray'):
+                          actual_data:'np.ndarray',x_data:'np.ndarray', from_pickle_directory=False):
     """
                 Compares the reconstructed data from the mean reconstructed signal field to another Field.
                 (e.g. ground truth or planck cosmology) and computes residuals.
@@ -136,7 +142,7 @@ def compare_in_data_space(save:'bool', show:'bool',synthetic:'bool',
 
     plt.subplot(2, 1, 1)
 
-    plt.xlabel("Natural redshift coordinate $x$", fontsize=15)
+    plt.xlabel("scale factor magnitude $x$", fontsize=15)
     plt.ylabel("Distance Modulus $\mu$", fontsize=15)
     plt.title(f"Comparison of {kw1} reconstruction and {kw2} in data space", fontsize=20)
     plt.plot(x_data, data_produced_by_comparison_field, label=f"{kw2}", markersize=8, marker="o", color="black", markerfacecolor=red,linewidth=0,alpha=0.4)
@@ -150,7 +156,7 @@ def compare_in_data_space(save:'bool', show:'bool',synthetic:'bool',
     plt.subplot(2, 1, 2)
 
     plt.title(f"Residuals of reconstruction to {kw4}")
-    plt.xlabel("Natural redshift coordinate $x$", fontsize=15)
+    plt.xlabel("scale factor magnitude $x$", fontsize=15)
     plt.ylabel("$\Delta \mu$", fontsize=15)
 
     plt.plot(x_data, np.zeros(len(x_data)), ls="--", lw=2, color="black", label="null line")
@@ -161,8 +167,8 @@ def compare_in_data_space(save:'bool', show:'bool',synthetic:'bool',
     else:
         difference1 = data_produced_by_posterior - actual_data                       # reconstructed data - actual data
         difference2 = data_produced_by_comparison_field - actual_data                # reconstructed data from planck cosmology - ground truth
-        plt.plot(x_data, difference1, "x", color=blue, alpha=0.4,label="Difference of reconstructed moduli to actual moduli")
-        plt.plot(x_data, difference2, "x", color=red, alpha=0.4,label="Difference of moduli reconstructed from planck cosmology to actual moduli")
+        plt.plot(x_data, difference1, "x", color=blue, alpha=0.8,label="Difference of reconstructed moduli to actual moduli")
+        plt.plot(x_data, difference2, "x", color=red, alpha=0.8,label="Difference of moduli reconstructed from planck cosmology to actual moduli")
 
 
     plt.legend()
@@ -184,8 +190,13 @@ def compare_in_data_space(save:'bool', show:'bool',synthetic:'bool',
         plt.clf()
     if save:
         fig.set_size_inches(16, 9)
+        groundpath = "figures/"
+        if from_pickle_directory:
+            path = path_extra + groundpath
+        else:
+            path = groundpath
         name = f"Comparison_of_{kw1}_reconstruction_and_{kw2}_dataspace"
-        plt.savefig("figures/" + name + ".png", dpi=300, bbox_inches='tight')
+        plt.savefig(path + name + ".png", dpi=300, bbox_inches='tight')
         print("Saved as " + name + ".png")
         plt.clf()
     if not show and not save:
@@ -194,7 +205,7 @@ def compare_in_data_space(save:'bool', show:'bool',synthetic:'bool',
 
 def compare_in_signal_space(save:'bool', show:'bool',synthetic:'bool',sig_c_field:'np.ndarray',x_max_data:'float',
                             reconstructed_mean:'np.ndarray',reconstructed_var:'np.ndarray',
-                            comparison_field:'np.ndarray',x_scale=None,y_scale=None,y_scale_deviation=None):
+                            comparison_field:'np.ndarray',x_scale=None,y_scale=None,y_scale_deviation=None, from_pickle_directory=False):
     """
             Compares the mean signal value of the reconstruction to another Field (e.g. ground truth
             or planck cosmology) and computes deviation.
@@ -227,11 +238,11 @@ def compare_in_signal_space(save:'bool', show:'bool',synthetic:'bool',sig_c_fiel
 
     plt.subplot(2,1,1)
 
-    plt.xlabel("Natural redshift coordinate $x$",fontsize=15)
+    plt.xlabel("scale factor magnitude $x$",fontsize=15)
     plt.ylabel("Signal field $s(x)$",fontsize=15)
     plt.title(f"Comparison of {kw1} reconstruction and {kw2}",fontsize=20)
-    plt.plot(sig_c_field,comparison_field, label=f"{kw2}", color=red,ls="--",lw=2)
     plt.errorbar(sig_c_field,reconstructed_mean,yerr=np.sqrt(reconstructed_var),label="reconstruction (lightblue: std)", color=blue,ecolor=lightblue,elinewidth=1.5, linewidth=1.5)
+    plt.plot(sig_c_field, comparison_field, label=f"{kw2}", color=red, ls="--", lw=2)
 
     if x_scale is not None:
         plt.xlim(x_scale[0], x_scale[1])
@@ -245,7 +256,7 @@ def compare_in_signal_space(save:'bool', show:'bool',synthetic:'bool',sig_c_fiel
 
     plt.subplot(2, 1, 2)
 
-    plt.xlabel("Natural redshift coordinate $x$",fontsize=15)
+    plt.xlabel("scale factor magnitude $x$",fontsize=15)
     difference = reconstructed_mean-comparison_field
     plt.errorbar(sig_c_field,difference,yerr=np.sqrt(reconstructed_var),label="deviation (lightblue: std)", color=mauve,ecolor=lightblue,elinewidth=1.5, linewidth=1.5)
     plt.plot(sig_c_field,np.zeros(len(sig_c_field)), ls="--", lw=2, color="black", label="null line")
@@ -270,15 +281,20 @@ def compare_in_signal_space(save:'bool', show:'bool',synthetic:'bool',sig_c_fiel
         plt.clf()
     if save:
         fig.set_size_inches(16, 9)
+        groundpath = "figures/"
+        if from_pickle_directory:
+            path = path_extra + groundpath
+        else:
+            path = groundpath
         name = f"Comparison_of_{kw1}_reconstruction_and_{kw2}_signalspace"
-        plt.savefig("figures/" + name + ".png", dpi=300, bbox_inches='tight')
+        plt.savefig(path + name + ".png", dpi=300, bbox_inches='tight')
         print("Saved as " + name + ".png")
         plt.clf()
     if not show and not save:
         plt.clf()
 
 def visualize_and_analyze_posterior_power_spectrum(save,show,power_spectra:'np.ndarray', power_spec_average:'np.ndarray',
-                                       place_params_at:'tuple',ground_truth=None,x_scale=None,y_scale=None):
+                                       place_params_at:'tuple',ground_truth=None,x_scale=None,y_scale=None,plot_debug:'bool'=False, from_pickle_directory=False):
 
 
     exponents = []
@@ -288,16 +304,22 @@ def visualize_and_analyze_posterior_power_spectrum(save,show,power_spectra:'np.n
     for pow_spec_sample in power_spectra:
 
         # calculate exponent and y-offset
-        params = get_power_spec_params(pow_spec_sample.val, plot=False)
+        params = get_power_spec_params(pow_spec_sample.val, plot=plot_debug)
+
         k_exp, y_offs = params
         exponents.append(k_exp)
         y_offsets.append(y_offs)
 
         clock+=1
-        if clock==1:
-            plt.plot(pow_spec_sample.val, color=orange, lw=2, label="power spectrum samples", alpha=1)
-        else:
-            plt.plot(pow_spec_sample.val, color=orange, lw=2, alpha=1/clock)
+        if not plot_debug:
+            if clock==1:
+                plt.plot(pow_spec_sample.val, color=orange, lw=2, label="power spectrum samples", alpha=1)
+            else:
+                plt.plot(pow_spec_sample.val, color=orange, lw=2, alpha=1/clock)
+
+    if plot_debug:
+        plt.show()
+        plt.clf()
 
     exponents = np.array(exponents)
     y_offsets = np.array(y_offsets)
@@ -339,8 +361,13 @@ def visualize_and_analyze_posterior_power_spectrum(save,show,power_spectra:'np.n
         plt.clf()
     if save:
         fig.set_size_inches(16, 9)
+        groundpath = "figures/"
+        if from_pickle_directory:
+            path = path_extra + groundpath
+        else:
+            path = groundpath
         name = f"Posterior_Power_Spectrum"
-        plt.savefig("figures/" + name + ".png", dpi=300, bbox_inches='tight')
+        plt.savefig(path + name + ".png", dpi=300, bbox_inches='tight')
         print("Saved as " + name + ".png")
         plt.clf()
     if not show and not save:
@@ -350,7 +377,7 @@ def visualize_and_analyze_posterior_power_spectrum(save,show,power_spectra:'np.n
 
 
 
-def real_data_plot(save:'bool', show:'bool',z_data:'np.ndarray',mu:'np.ndarray',keyword="Pantheon+"):
+def real_data_plot(save:'bool', show:'bool',z_data:'np.ndarray',mu:'np.ndarray',keyword="Pantheon+", from_pickle_directory=False):
     """
             Returns a figure containing showing the redshift - moduli distribution of a given catalogue.
 
@@ -378,8 +405,13 @@ def real_data_plot(save:'bool', show:'bool',z_data:'np.ndarray',mu:'np.ndarray',
         plt.clf()
     if save:
         fig.set_size_inches(16, 9)
+        groundpath = "figures/"
+        if from_pickle_directory:
+            path = path_extra + groundpath
+        else:
+            path = groundpath
         name = f"{keyword}_modulus_redshift_distribution"
-        plt.savefig("figures/" + name + ".png", dpi=300, bbox_inches='tight')
+        plt.savefig(path  + name + ".png", dpi=300, bbox_inches='tight')
         print("Saved as " + name + ".png")
         plt.clf()
 

@@ -6,16 +6,16 @@ from helpers.plotters import  synthetic_plot, compare_in_signal_space, visualize
 # -------  Basic parameters and constants  ------- #
 
 switch1 = False         # save in 'figures' folder: Ground truth in signal and pow spec + data realization
-switch2 = False         # show via plt.show(): Ground truth in signal and pow spec + data realization
+switch2 = True         # show via plt.show(): Ground truth in signal and pow spec + data realization
 
 switch3 = False         # save in 'figures' folder: Comparison of reconstruction and ground truth in signal space
-switch4 = False         # show via plt.show(): Comparison of reconstruction and ground truth in signal space
+switch4 = True         # show via plt.show(): Comparison of reconstruction and ground truth in signal space
 
 switch5 = False         # save in 'figures' folder: Visualization of posterior power spectrum
-switch6 = False         # show via plt.show(): Visualization of posterior power spectrum
+switch6 = True         # show via plt.show(): Visualization of posterior power spectrum
 
 switch7 = False         # save in 'figures' folder: Comparison of reconstruction and ground truth in data space
-switch8 = False         # show via plt.show(): Comparison of reconstruction and ground truth in data space
+switch8 = True         # show via plt.show(): Comparison of reconstruction and ground truth in data space
 
 d_h = 3e8/(68.6e3)*1e6  # Hubble-length in parsecs
 noise = 0.1             # Noise level

@@ -19,7 +19,8 @@ Requirements
 
 > **Note**
 > 
-> This is a note
+> Pickle files **will** be overwritten if new inference run starts and pickles are not manually renamed.
+> See folder structure down below.
 
 > **Warning**
 > 
@@ -56,13 +57,6 @@ Usage and Workflow
     └── 🐍 visualize_pickle_data.py  # After inference run, posterior samples can be re-visualized here.
 ```
 
-> **Note**
-> 
-> This is a note
-
-> **Note**
-
->Pickle files **will** be overwritten if new inference run starts and pickles are not manually renamed.
 
 ### Elements of time
 
@@ -73,9 +67,4 @@ Usage and Workflow
 >Runtime Pantheon+ data $\approx 10-15 \hspace{1mm}$ hrs
 
 
-> **Note**
-> This is a note
-
-> **Warning**
-> This is a warning
 

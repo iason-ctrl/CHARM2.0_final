@@ -42,7 +42,7 @@ Usage and Workflow
 .
 ├── 🐍 cosmological_tomography.py    # Inference with real data
 ├── 🐍 synthetic_catalogue.py        # Inference with synthetic data 
-├── 📂 figures                       # Place where figures are stored. Containts figures examples.
+├── 📂 figures                       # Place where figures are stored. Contains figures examples.
 ├── 📂 raw data                      # Folder containing moduli, redshifts, covariances ...
 ├── 📂 helpers                       
 │   ├── 🐍 plotters.py               # Convenience plotting functions
@@ -61,9 +61,16 @@ Usage and Workflow
 
 ### Elements of time
 
->Runtime synthetic data $\approx 3-5 \hspace{1mm} $min
+>Runtime synthetic data $\approx 3-5 \hspace{1mm}$ min
 
->Runtime Union2.1 data $\approx 40-60 \hspace{1mm} $min
+>Runtime Union2.1 data $\approx 40-60 \hspace{1mm}$ min
 
->Runtime Pantheon+ data $\approx 10-15 \hspace{1mm} $hrs
+>Runtime Pantheon+ data $\approx 10-15 \hspace{1mm}$ hrs
+
+
+> **Note**
+> This is a note
+
+> **Warning**
+> This is a warning
 

@@ -21,4 +21,6 @@ Do NOT forget to change the parameters of the corr. field model to be the same a
 Continue then here with the visualization of the posterior in case something went wrong,
 or you want to reanalyze the data (e.g. adjust the scale), implement your own functions etc.
 
+You will need to set the 'from_pickles_folder' keyword to True for each plot function.
+
 """

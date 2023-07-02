@@ -45,6 +45,7 @@ Usage and Workflow
 * After inference run, posterior samples can be re-visualized in the program `visualize_pickle_data.py` in the 📂`pickles` subfolder, by calling
 
         posterior_realizations = unpickle_me_this("synthetic_posterior_realizations.pickle")
+* For the visualization from the pickles directory, the keyword `from_pickles_folder` will be have to be set to `True` for each plot function
 * At the beginning of the inference scripts following boolean variables can be set: `switch1-8`; set if visualizations
 of data, posterior, power spectrum etc. should be shown via `plt.show()` or saved in the 📂`figures` folder.
 `use_union_data`; Uses Union2.1 data if `True`, Pantheon+ data if `False`

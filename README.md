@@ -17,6 +17,10 @@ Requirements
         pip install nifty8
 * If necessary, after NIFTy installation: Numpy, Scipy, Pandas, pickle, matplotlib, seaborn 
 
+> **Note**
+> 
+> This is a note
+
 > **Warning**
 
 >When visualizing the power spectrum of the posterior by using the function

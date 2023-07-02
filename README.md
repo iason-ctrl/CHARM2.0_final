@@ -42,6 +42,11 @@ Usage and Workflow
         python synthetic_catalogue.py
 * There will be four matplotlib figures showing up, each need to be closed for the program to continue running
 * Inference run with synthetic data: `synthetic_catalogue.py`. Inference run with real data: `cosmological_tomography.py`
+* After inference run, posterior samples can be re-visualized in the program `visualize_pickle_data.py` in the 📂`pickles` subfolder, by calling
+
+        posterior_realizations = unpickle_me_this("synthetic_posterior_realizations.pickle")
+       
+
 
 ```
 .

@@ -53,14 +53,17 @@ Usage and Workflow
 ```
 
 > **Note**
+> This is a note
+
+> **Note**
 
 >Pickle files **will** be overwritten if new inference run starts and pickles are not manually renamed.
 
 ### Elements of time
 
->Runtime synthetic data $\approx 3-5 \hspace{1mm} \mathrm{min}$
+>Runtime synthetic data $\approx 3-5 \hspace{1mm} $min
 
->Runtime Union2.1 data $\approx 40-60 \hspace{1mm} \mathrm{min}$
+>Runtime Union2.1 data $\approx 40-60 \hspace{1mm} $min
 
->Runtime Pantheon+ data $\approx 10-15 \hspace{1mm} \mathrm{hrs}$
+>Runtime Pantheon+ data $\approx 10-15 \hspace{1mm} $hrs
 

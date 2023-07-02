@@ -22,7 +22,7 @@ Requirements
 > This is a note
 
 > **Warning**
-
+> 
 >When visualizing the power spectrum of the posterior by using the function
 > `visualize_and_analyze_posterior_power_spectrum()`, the mean and uncertainty of 
 > `fluctuations` and `loglogavgslope` is returned. This **only holds** if the parameters of the correlated field model
@@ -57,6 +57,7 @@ Usage and Workflow
 ```
 
 > **Note**
+> 
 > This is a note
 
 > **Note**

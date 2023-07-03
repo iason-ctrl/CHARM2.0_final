@@ -63,7 +63,7 @@ is expected. I want to analyize: fluctuations = (1, 1e-16), (0.22, 1e-16), (1,1)
 args = {
     "offset_mean" :     0,
     "offset_std" :      None,
-    "fluctuations":     (3,1),
+    "fluctuations":     (3,1e-16),
     "loglogavgslope":   (-4,1e-16),
     "asperity":         None,
     "flexibility":      None
@@ -93,7 +93,7 @@ else:
     noise_data = build_cov_pantheon()
 
 R = ift.LOSResponse(signal_space, starts=natural_redshift_starts, ends=natural_redshift_ends)
-N_inv = MatrixApplyInverseNoise(domain=data_space,matrix=noise_data,sampling_dtype=float)
+N_inv = MatrixApplyInverseNoise(domain=data_space,matrix=noise_data,sampling_dtype=np.float64)
 
 # ------- Build the signal response as chain of operators  ------- #
 
@@ -156,7 +156,7 @@ average_power_spectrum = posterior_realizations.average(signal.power_spectrum)
 compare_in_signal_space(save=switch3, show=switch4, synthetic=False, sig_c_field=signal_coordinate_field.val,
                         x_max_data=max(natural_redshift_ends[0]),reconstructed_mean=mean.val,
                         reconstructed_var=var.val,comparison_field=planck_cosmology_field.val,
-                        y_scale=(0,24))
+                        y_scale=(-0.5,2.5))
 
 
 loglogavgslope, fluctuations = visualize_and_analyze_posterior_power_spectrum(save=switch5,show=switch6,power_spectra=power_spectra,
